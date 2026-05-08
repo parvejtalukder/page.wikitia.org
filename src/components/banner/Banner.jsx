@@ -31,8 +31,8 @@ const Banner = () => {
 
     return (
         <div className="bg-transparent flex gap-2 flex-col justify-center items-center py-12">
-            <h2 className="text-[#136630] font-bold text-5xl">Create or Edit Wikitia page</h2>
-            <div className="flex justify-around items-center gap-3">
+            <h2 className="text-[#136630] font-bold text-2xl lg:text-5xl">Create or Edit Wikitia page</h2>
+            <div className="flex lg:flex-row flex-col justify-around items-center gap-3">
                 {
                     card_data.map((crd) => <Card key={crd.id} card={crd} ></Card>)
                 }

@@ -1,9 +1,12 @@
 import { Link } from "react-router";
 import Stand from "../stand/stand";
+import Menu from "../../assets/menu.svg"
+import Open from "../../assets/open.svg"
+import { useState } from "react";
+import Mobile from "../../components/mobile/Mobile";
 
 const links = 
 <>
-<ul className="flex justify-around items-center gap-5">
 
   <a href="/">
     <li className="text-[15px] text-[#136630] hover:text-[#39ab00] font-bold">
@@ -35,20 +38,28 @@ const links =
     </li>
   </a>
 
-  <div><Stand /></div>
+  {/* <div><Stand /></div> */}
 
-</ul>
 </>
 
 const Header = () => {
+
+  const [mobile, setMobile] = useState(false);
+
+  const toggleMobile = () => {
+    setMobile(!mobile);
+  }
+
     return (
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+      <>
+        <div className="max-w-6xl mx-auto lg:border-0 flex items-center justify-between px-6 mt-5 lg:mt-0 py-4">
             <div className="flex items-center gap-12">
                 <Link to={"/"}><img src="https://wikitia.org/resources/assets/wikitia.png" alt="Wikitia" className="h-14 w-auto"/></Link>
-                <ul className="flex justify-around items-center gap-5">
+                <ul className="hidden lg:flex justify-around items-center gap-5">
                     {links}
                 </ul>
             </div>
+            <div className="flex justify-between items-center">
             <button className="p-2 rounded-full hover:bg-gray-100">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +75,17 @@ const Header = () => {
                       d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                </button>
+                  
+              </button>
+                <div className="flex lg:hidden">
+                    <img onClick={toggleMobile} src={mobile ? Open : Menu} alt="Menu" className={`${mobile ? "w-6" : "w-10"} text-blue-400`} />
+                </div>
+              </div>
         </div>
+        {
+          mobile && <Mobile url={links} ></Mobile>
+        }
+        </>
     );
 };
 
