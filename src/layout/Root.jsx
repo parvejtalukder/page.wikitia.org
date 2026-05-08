@@ -5,7 +5,7 @@ import Header from '../templates/header/Header';
 
 const Root = () => {
     return (
-        <div className='px-5 lg:px-0'>
+        <div className='px-10 lg:px-0'>
             <header className='bg-white rounded-2xl lg:rounded-none shadow lg:shadow-none'>
                 <Header></Header>
             </header>
