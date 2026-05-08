@@ -38,7 +38,7 @@ export default function Review() {
             disableOnInteraction: false,
           }}
           modules={[Pagination, Autoplay]}
-          className="pb-14 bg-white rounded-3xl w-sm lg:w-2xl"
+          className="pb-14 bg-white rounded-3xl w-[330px] px-3 lg:w-2xl"
         >
           {reviews.map((review) => (
             <SwiperSlide key={review.id}>
