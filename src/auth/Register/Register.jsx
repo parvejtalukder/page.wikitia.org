@@ -6,6 +6,14 @@ import useAxiosSecure from "../../hooks/useAxios";
 import Swal from "sweetalert2";
 
 const Register = () => {
+  
+  const { user , goWithGoogle} = useAuth();
+  const go_to = useNavigate();
+
+  if (user) {
+    go_to("/");
+  }
+
   const location = useLocation();
   const navigate = useNavigate();
   const axios = useAxiosSecure();
@@ -16,6 +24,30 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+    const GoogleRegister = async (e) => {
+        e.preventDefault();
+      try {
+        const resGoGoogle = await goWithGoogle();
+        const user = resGoGoogle.user;
+        if (user) {
+          await Swal.fire({
+            title: 'Registration Completed!',
+            text: `Welcome, ${user.displayName || 'User'}!`,
+            icon: 'success',
+            confirmButtonText: 'Continue',
+          });
+          navigate('/');
+        }
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Google Login Failed',
+          text: error.message || 'Something went wrong. Please try again.',
+          confirmButtonText: 'OK',
+        });
+      }
+    };
 
   const handleRegistration = async (data) => {
     try {
@@ -33,7 +65,7 @@ const Register = () => {
         email: createdUser.email,
       };
       
-      const postRes = await axios.post("/user", userInfo);
+      const postRes = await axios.post("/add_user", userInfo);
 
       if (postRes.data.insertedId || postRes.data.success) {
         await Swal.fire({
@@ -131,6 +163,7 @@ const Register = () => {
         <hr />
 
         <button
+          onClick={GoogleRegister}
           type="button"
           className="btn bg-white text-black border-[#e5e5e5]"
         >
@@ -162,25 +195,6 @@ const Register = () => {
             </g>
           </svg>
           Register with Google
-        </button>
-
-        <button
-          type="button"
-          className="btn bg-black text-white border-black"
-        >
-          <svg
-            aria-label="X logo"
-            width="16"
-            height="12"
-            viewBox="0 0 300 271"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="currentColor"
-              d="m236 0h46l-101 115 118 156h-92.6l-72.5-94.8-83 94.8h-46l107-123-113-148h94.9l65.5 86.6zm-16.1 244h25.5l-165-218h-27.4z"
-            />
-          </svg>
-          Register with X
         </button>
         <label>
           Already have an account?{" "}
