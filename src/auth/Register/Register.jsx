@@ -28,7 +28,12 @@ const Register = () => {
                     displayName: user.displayName,
                     email: user.email
                 }
-                
+                axios.post("/user", userInfo) 
+                .then(post_res => {
+                    if (res.data.insertedId) {
+                        console.log("User in db");
+                    } 
+                })
             })
         })
     }

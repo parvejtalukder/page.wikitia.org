@@ -2,8 +2,10 @@ import axios from 'axios';
 import useAuth from './useAuth';
 import { useEffect } from 'react';
 
+const server_domain = import.meta.env.VITE_SERVER;
+
 const axiosSecure = axios.create({
-    baseURL: "http://localhost:3000/"
+    baseURL: server_domain
 })
 
 const useAxiosSecure = () => {
