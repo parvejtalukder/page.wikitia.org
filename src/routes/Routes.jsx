@@ -5,6 +5,7 @@ import RCWP from "../pages/RCWP/RCWP";
 import LoginBox from "../layout/LoginBox";
 // import Login from "../auth/Login/Login";
 import LoginPage from "../auth/Login/Login";
+import Register from "../auth/Register/Register";
 
 export const router = createBrowserRouter([
   {
@@ -22,13 +23,17 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: "/",
     Component: LoginBox,
     children: [
       {
-        index: true,
+        path: "login",
         Component: LoginPage,
       },
+      { 
+        path: "register",
+        Component: Register,
+      }
     ],
   },
 ]);

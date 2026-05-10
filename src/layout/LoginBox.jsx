@@ -1,13 +1,13 @@
-import { NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import Wikitia from "../assets/logo.webp";
 
 const LoginBox = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <section className="w-full max-w-4xl p-8 rounded-2xl shadow-md flex flex-col lg:flex-row items-center gap-10 lg:py-20">
-        <div className="lg:-ml-10 w-1/2 flex justify-center items-center">
+        <Link to={"/"} className="lg:-ml-10 w-1/2 flex justify-center items-center">
           <img className="hover-3d w-44" src={Wikitia} alt="Wikitia" />
-        </div>
+        </Link>
         <div className="w-1/2 flex flex-col justify-center items-center lg:mr-10">
         <div className="flex w-[80%] mb-6">
             <NavLink
