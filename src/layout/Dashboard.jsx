@@ -1,8 +1,8 @@
 // import React from "react";
-import { FiPlusCircle, FiEdit2, FiImage, FiVideo, FiBookOpen, FiLogOut } from "react-icons/fi";
+import { FiPlusCircle, FiEdit2, FiImage, FiBookOpen, FiLogOut } from "react-icons/fi";
 import { FiHome, FiSettings } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
-import { NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 
@@ -12,7 +12,7 @@ const linkClass = ({ isActive }) =>
 
 const Dashboard = () => {
 
-    const { user, logOut } = useAuth();
+    const { logOut } = useAuth();
 
       const logOutGo = async () => {
       try {
@@ -52,7 +52,7 @@ const Dashboard = () => {
             ☰
           </label>
 
-          <div className="px-4 text-xl font-bold">Wikitia Dashboard</div>
+          <Link to={"/dashboard"} className="px-4 text-xl font-bold">Wikitia Dashboard</Link>
         </nav>
 
         {/* PAGE CONTENT */}
@@ -78,10 +78,17 @@ const Dashboard = () => {
           </li>
         
           {/* WIKI TITLE */}
-          <li className="menu-title mt-2">
+          <Link to={"/dashboard"} className="menu-title mt-2">
             <span>Wiki Management</span>
-          </li>
+          </Link>
         
+          {/* <li>
+            <NavLink to="/dashboard/home" className={linkClass}>
+              <FiPlusCircle />
+              <span className="ml-2">Dashboard</span>
+            </NavLink>
+
+          </li> */}
           <li>
             <NavLink to="/dashboard/create-page" className={linkClass}>
               <FiPlusCircle />
@@ -97,18 +104,18 @@ const Dashboard = () => {
           </li>
         
           <li>
-            <NavLink to="/dashboard/add-image" className={linkClass}>
+            <NavLink to="/dashboard/add-media" className={linkClass}>
               <FiImage />
-              <span className="ml-2">Add Image</span>
+              <span className="ml-2">Add Media</span>
             </NavLink>
           </li>
         
-          <li>
+          {/* <li>
             <NavLink to="/dashboard/add-video" className={linkClass}>
               <FiVideo />
               <span className="ml-2">Add Video</span>
             </NavLink>
-          </li>
+          </li> */}
         
           <li>
             <NavLink to="/dashboard/my-pages" className={linkClass}>
@@ -123,7 +130,7 @@ const Dashboard = () => {
           </li>
         
           <li>
-            <NavLink to="/dashboard/payment-history" className={linkClass}>
+            <NavLink to="/dashboard/payments" className={linkClass}>
               <FiCreditCard />
               <span className="ml-2">Payments</span>
             </NavLink>

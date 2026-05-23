@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 // 1. CONFIG DRIVEN STRUCTURE (IMPORTANT)
 const FORM_CONFIG = {
@@ -53,6 +54,7 @@ const CreateWikiPage = () => {
 
   const axios = useAxiosSecure();
   const [type, setType] = useState("person");
+  const navigate = useNavigate();
 
   const {
     register,
@@ -71,6 +73,8 @@ const CreateWikiPage = () => {
       showCancelButton: true,
       confirmButtonText: "Yes",
     });
+
+    const token = await user.getIdToken();
 
     if (!result.isConfirmed) return;
 
@@ -114,8 +118,20 @@ const CreateWikiPage = () => {
 
     console.log(payload);
     // await axios.post("/create-page", payload);
-    const res = await axios.post("/create-page", payload);
-    if(res) await Swal.fire("Success", "Submitted for review", "success");
+    // const res = await axios.post("/create-page", payload);
+    const res = await axios.post(
+      "/create-page",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if(res.data.success) await Swal.fire("Success", "Submitted for review", "success");
+    if(res.data.success) {
+      navigate("/dashboard/my-pages");
+    }
     // else await Swal.fire("Success", "Submitted for review", "warning");
   };
 

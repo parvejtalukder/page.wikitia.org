@@ -44,6 +44,7 @@ const Register = () => {
       uid: googleUser.uid,
       displayName: googleUser.displayName,
       email: googleUser.email,
+      role: "user"
       // photoURL: googleUser.photoURL || null,
       // provider: "google",
     };
@@ -89,6 +90,7 @@ const Register = () => {
         uid: createdUser.uid,
         displayName: data.name,
         email: createdUser.email,
+        role: "user"
       };
       
       const postRes = await axios.post("/add_user", userInfo);

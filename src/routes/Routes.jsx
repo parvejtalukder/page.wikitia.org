@@ -9,6 +9,10 @@ import Register from "../auth/Register/Register";
 import Private from "./private/Private";
 import Dashboard from "../layout/Dashboard";
 import CreateWikiPage from "../dashboard/CreateWikiPage/CreateWikiPage";
+import MyPages from "../dashboard/MyPages/MyPages";
+import PageDetails from "../dashboard/PageDetails";
+import Index from "../dashboard/Index";
+import Payment from "../payments/DoPayment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -45,8 +49,21 @@ export const router = createBrowserRouter([
   element: <Private><Dashboard /></Private>,
   children: [
     {
+      index: true,
+      element: <Private><Index></Index></Private>
+    },
+    {
       path: "create-page",
       element: <Private><CreateWikiPage /></Private>,
+    },
+    {
+      path: "payments",
+      element: <Private><Payment></Payment></Private>
+    },
+    // {
+    {
+      path: "payment/submit",
+      element: <Private><Payment></Payment></Private>
     },
     // {
     //   path: "edit-page/:pageId?",
@@ -60,10 +77,14 @@ export const router = createBrowserRouter([
     //   path: "add-video/:pageId?",
     //   element: <Private><AddVideoToWiki /></Private>,
     // },
-    // {
-    //   path: "my-pages",
-    //   element: <Private><MyWikiPages /></Private>,
-    // },
+    {
+      path: "my-pages",
+      element: <Private><MyPages /></Private>,
+    },
+    {
+      path: "my-pages/:id",
+      element: <Private><PageDetails></PageDetails></Private>
+    },
     // {
     //   path: "reserve",
     //   element: <Private><MakeReservation /></Private>,
