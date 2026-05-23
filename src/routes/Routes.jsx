@@ -6,6 +6,9 @@ import LoginBox from "../layout/LoginBox";
 // import Login from "../auth/Login/Login";
 import LoginPage from "../auth/Login/Login";
 import Register from "../auth/Register/Register";
+import Private from "./private/Private";
+import Dashboard from "../layout/Dashboard";
+import CreateWikiPage from "../dashboard/CreateWikiPage/CreateWikiPage";
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +21,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "request-for-creation-of-a-wikitia-page",
-        Component: RCWP,
+        // Component: RCWP,
+        element: <Private><RCWP></RCWP></Private>
       },
     ],
   },
@@ -36,4 +40,54 @@ export const router = createBrowserRouter([
       }
     ],
   },
+  {
+  path: "/dashboard",
+  element: <Private><Dashboard /></Private>,
+  children: [
+    {
+      path: "create-page",
+      element: <Private><CreateWikiPage /></Private>,
+    },
+    // {
+    //   path: "edit-page/:pageId?",
+    //   element: <Private><EditWikiPage /></Private>,
+    // },
+    // {
+    //   path: "add-image/:pageId?",
+    //   element: <Private><AddImageToWiki /></Private>,
+    // },
+    // {
+    //   path: "add-video/:pageId?",
+    //   element: <Private><AddVideoToWiki /></Private>,
+    // },
+    // {
+    //   path: "my-pages",
+    //   element: <Private><MyWikiPages /></Private>,
+    // },
+    // {
+    //   path: "reserve",
+    //   element: <Private><MakeReservation /></Private>,
+    // },
+    // {
+    //   path: "my-reservations",
+    //   element: <Private><MyReservations /></Private>,
+    // },
+    // {
+    //   path: "payment-history",
+    //   element: <Private><PaymentHistory /></Private>,
+    // },
+    // {
+    //   path: "billing",
+    //   element: <Private><BillingPage /></Private>,
+    // },
+    // {
+    //   path: "settings",
+    //   element: <Private><DashboardSettings /></Private>,
+    // },
+    // {
+    //   index: true,
+    //   element: <Private><DashboardHome /></Private>,
+    // },
+  ],
+},
 ]);

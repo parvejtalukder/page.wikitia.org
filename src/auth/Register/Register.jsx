@@ -7,17 +7,22 @@ import Swal from "sweetalert2";
 
 const Register = () => {
   
-  const { user , goWithGoogle} = useAuth();
-  const go_to = useNavigate();
-
-  if (user) {
-    go_to("/");
-  }
+  // const { user , goWithGoogle} = useAuth();
+  // const go_to = useNavigate();
+  // if (user) {
+  //   go_to("/");
+  // }
 
   const location = useLocation();
   const navigate = useNavigate();
   const axios = useAxiosSecure();
-  const { registerUser, updateUser } = useAuth();
+  const { goWithGoogle , registerUser, updateUser } = useAuth();
+
+  // if (user) {
+  //   navigate("/");
+  // }
+
+  const from = location.state || "/";
 
   const {
     register,
@@ -25,29 +30,50 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-    const GoogleRegister = async (e) => {
-        e.preventDefault();
-      try {
-        const resGoGoogle = await goWithGoogle();
-        const user = resGoGoogle.user;
-        if (user) {
-          await Swal.fire({
-            title: 'Registration Completed!',
-            text: `Welcome, ${user.displayName || 'User'}!`,
-            icon: 'success',
-            confirmButtonText: 'Continue',
-          });
-          navigate('/');
-        }
-      } catch (error) {
-        await Swal.fire({
-          icon: 'error',
-          title: 'Google Login Failed',
-          text: error.message || 'Something went wrong. Please try again.',
-          confirmButtonText: 'OK',
-        });
-      }
+  const GoogleRegister = async () => {
+  try {
+    const res = await goWithGoogle();
+    const googleUser = res.user;
+
+    // optional: sync display name (safe)
+    await updateUser({
+      displayName: googleUser.displayName || "User",
+    });
+
+    const userInfo = {
+      uid: googleUser.uid,
+      displayName: googleUser.displayName,
+      email: googleUser.email,
+      // photoURL: googleUser.photoURL || null,
+      // provider: "google",
     };
+
+    // save to DB
+    const postRes = await axios.post("/add_user", userInfo);
+
+    if (postRes.data.insertedId || postRes.data.success) {
+      await Swal.fire({
+        title: "Registration Completed!",
+        text: `Welcome, ${googleUser.displayName || "User"}!`,
+        icon: "success",
+      });
+
+      navigate(from, { replace: true });
+    } else {
+      Swal.fire({
+        title: "Warning",
+        text: "Google user created but DB save failed",
+        icon: "warning",
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Google Login Failed",
+      text: error.message || "Something went wrong",
+    });
+  }
+};
 
   const handleRegistration = async (data) => {
     try {
@@ -74,7 +100,8 @@ const Register = () => {
           icon: "success",
         });
 
-        navigate(location?.state || "/");
+        // navigate(location?.pathname || "/");
+        navigate(from, { replace: true });
       } else {
         Swal.fire({
           title: "Registration Failed!",

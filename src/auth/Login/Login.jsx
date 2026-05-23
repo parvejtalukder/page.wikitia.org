@@ -1,18 +1,24 @@
 // import React from 'react';
 
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 
 const LoginPage = () => {
 
-    const { user, goWithGoogle, signInUser } = useAuth();
-    const go_to = useNavigate();
+    const { goWithGoogle, signInUser } = useAuth();
+    // const go_to = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
+    // if (user) {
+    //   go_to("/");
+    // }
+    const from = location.state || "/";
 
-    if (user) {
-      go_to("/");
-    }
+    // if (user) {
+    //   navigate("/");
+    // }
 
     const {
         register,
@@ -20,8 +26,8 @@ const LoginPage = () => {
         formState: { errors },
       } = useForm();
 
-    const loginFunc = async (e) => {
-        e.preventDefault();
+    const loginFunc = async () => {
+        // e.preventDefault();
         try {
             const res_login = await goWithGoogle();
             if (res_login) {
@@ -33,6 +39,8 @@ const LoginPage = () => {
                   timer: 1500,
                   showConfirmButton: false,
                 });
+                // navigate(location?.pathname || "/");
+                navigate(from, { replace: true });
             } else {
                await Swal.fire({
                   icon: 'warning',
@@ -65,6 +73,8 @@ const LoginPage = () => {
                   timer: 1500,
                   showConfirmButton: false,
                 });
+                // navigate(location?.pathname || "/");
+                navigate(from, { replace: true });
             } else {
                await Swal.fire({
                   icon: 'warning',

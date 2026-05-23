@@ -5,7 +5,7 @@ import Open from "../../assets/open.svg"
 import { useState } from "react";
 import Mobile from "../../components/mobile/Mobile";
 import useAuth from "../../hooks/useAuth";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 
 const links = 
 <>
@@ -52,30 +52,7 @@ const Header = () => {
     setMobile(!mobile);
   }
 
-  const { user, logOut } = useAuth();
-
-  const logOutGo = async () => {
-  try {
-    await logOut();
-
-    await Swal.fire({
-      icon: 'success',
-      title: 'Logged Out',
-      text: 'You have been logged out successfully.',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-
-  } catch (error) {
-    await Swal.fire({
-      icon: 'error',
-      title: 'Failed to Log Out',
-      text: error.message || 'Something went wrong',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  }
-};
+  const { user } = useAuth();
 
     return (
       <>
@@ -94,7 +71,7 @@ const Header = () => {
                   !user && <a href="/login" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Login</a>
                 }
                 {
-                  user && <a onClick={logOutGo} className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Log Out</a>
+                  user && <a href="/dashboard" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Dashboard</a>
                 }
               </div>
         </div>
