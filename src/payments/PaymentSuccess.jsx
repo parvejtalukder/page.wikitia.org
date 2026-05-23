@@ -5,7 +5,7 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
 
   const {
-    paymentId,   // ✅ MongoDB ID
+    paymentId,   
     pageId,
     title,
     charge,

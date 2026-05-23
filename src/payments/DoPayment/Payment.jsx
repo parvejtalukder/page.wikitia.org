@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const Payment = () => {
 
-  const [method] = useState("");
+  const [method, setMethod] = useState("");
   const location = useLocation();
   // const navigateor
 
@@ -46,7 +46,7 @@ const Payment = () => {
               // setMethod("bank1")
             }
             {/* FORM */}
-            <PaymentMethods />
+            <PaymentMethods method={method} setMethod={setMethod} />
             <PaymentConfirmForm
               pageId={pageId}
               title={title}

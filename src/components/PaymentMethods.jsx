@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const PaymentMethods = () => {
-  const [method, setMethod] = useState("bank1");
+const PaymentMethods = ({method, setMethod}) => {
+//   const [method, setMethod] = useState("bank1");
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async (text) => {
