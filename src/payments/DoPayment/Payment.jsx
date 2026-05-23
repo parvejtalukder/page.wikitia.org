@@ -9,15 +9,14 @@ const Payment = () => {
 
   const [method, setMethod] = useState("");
   const location = useLocation();
-  // const navigateor
+  
+  // const location = useLocation();
 
-  const {
-    pageId,
-    charge,
-    title,
-    paid,
-    type
-  } = location.state || {};
+if (!location.state) {
+  return <div>Invalid payment session</div>;
+}
+
+const { pageId, charge, title, paid, type } = location.state;
 
   return (
     <div className="p-6 lg:p-10 min-h-screen">

@@ -139,8 +139,8 @@ const MyPages = () => {
                     !page.paid && <Link 
                     state={{
                           pageId: page._id,
-                          charge: page.charge,
-                          title: page.identity.name || "Blank",
+                          charge: page?.charge || 59,
+                          title: page.identity?.name || "Blank",
                           paid: page.paid,
                           type: "page",
                         }}
