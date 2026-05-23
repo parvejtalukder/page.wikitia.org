@@ -13,6 +13,7 @@ import MyPages from "../dashboard/MyPages/MyPages";
 import PageDetails from "../dashboard/PageDetails";
 import Index from "../dashboard/Index";
 import Payment from "../payments/DoPayment/Payment";
+import PaymentSuccess from "../payments/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
     {
       path: "payment/submit",
       element: <Private><Payment></Payment></Private>
+    },
+    {
+      path: "payment/done",
+      element: <Private><PaymentSuccess></PaymentSuccess></Private>
     },
     // {
     //   path: "edit-page/:pageId?",

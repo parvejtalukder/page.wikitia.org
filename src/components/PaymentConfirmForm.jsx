@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const PaymentConfirmForm = ({
   pageId,
@@ -20,6 +21,7 @@ const PaymentConfirmForm = ({
 
   const { user } = useAuth();
   const axios = useAxiosSecure();
+  const navigator = useNavigate();
 
   const onSubmit = async (data) => {
 
@@ -54,12 +56,26 @@ const PaymentConfirmForm = ({
           Authorization: `Bearer ${token}`,
         },
       });
+
       Swal.fire({
         icon: "success",
         title: "Payment Submitted!",
         text: "Your payment is under review.",
         confirmButtonColor: "#16a34a",
       });
+
+      if (res.data.insertedId) {
+        navigator("/dashboard/payment/done", {
+              state: {
+                pageId,
+                title,
+                charge,
+                method,
+                paymentId: res.data.insertedId,
+                transactionId: data.transactionId,
+              },
+            });
+      }
     
       console.log("Success:", res.data);
       reset();
