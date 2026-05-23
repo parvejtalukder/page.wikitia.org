@@ -32,9 +32,9 @@ const MyPages = () => {
       isLoading,
       isError,
     } = useQuery({
-      queryKey: ["pages", user?.uid],
+      queryKey: ["pages", user?.uid, page],
       queryFn: fetchPages,
-    //   enabled: !!user?.uid,
+      enabled: !!user?.uid,
       refetchOnWindowFocus: true,
     });
 

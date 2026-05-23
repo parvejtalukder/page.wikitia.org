@@ -57,7 +57,7 @@ const PaymentMethods = ({method, setMethod}) => {
     },
   };
 
-  const selected = paymentDetails[method];
+  const selected = paymentDetails[method] || {};
 
   return (
     <div className="bg-base-100 rounded-3xl border border-base-300 p-6 space-y-5">
