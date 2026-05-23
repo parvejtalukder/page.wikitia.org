@@ -140,7 +140,7 @@ const MyPages = () => {
                     state={{
                           pageId: page._id,
                           charge: page.charge,
-                          title: page.identity.name,
+                          title: page.identity.name || "Blank",
                           paid: page.paid,
                           type: "page",
                         }}
