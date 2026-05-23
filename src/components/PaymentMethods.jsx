@@ -111,16 +111,16 @@ const PaymentMethods = ({method, setMethod}) => {
         )}
 
         {/* WISE */}
-        {method === "wise" && (
-          <a
-            href={selected.link}
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-primary w-full"
-          >
-            Pay with Wise
-          </a>
-        )}
+        {method === "wise" && <div className="flex justify-between">
+            <p>{paymentDetails.wise.link}</p>
+            <button
+              onClick={() => copyToClipboard(paymentDetails.wise.link)}
+              className="btn btn-sm btn-outline"
+              type="button"
+            >
+              {copied ? "Copied" : "Copy"}
+            </button>
+          </div> }
 
         {/* PAYONEER */}
         {method === "payoneer" && (
