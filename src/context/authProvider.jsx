@@ -31,10 +31,12 @@ const AuthProvider = ({children}) => {
         return signInWithPopup(auth, googleProvider);
     }
 
-    const logOut = () => {
+    const logOut = async () => {
         setLoading(true)
+        await signOut(auth);
         queryClient.clear();
-        return signOut(auth);
+        // signOut(auth);
+        setUser(null);
     }
 
     const updateUser = (profile) => {
@@ -43,6 +45,7 @@ const AuthProvider = ({children}) => {
 
     useEffect( () => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+            queryClient.clear();
             setUser(currentUser);
             setLoading(false);
         });
@@ -62,9 +65,9 @@ const AuthProvider = ({children}) => {
     }
 
     return (
-        <AuthContext value={AuthInfo}>
+        <AuthContext.Provider value={AuthInfo}>
             {children}
-        </AuthContext>
+        </AuthContext.Provider>
     );
 };
 
