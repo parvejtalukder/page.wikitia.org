@@ -14,6 +14,7 @@ import PageDetails from "../dashboard/PageDetails";
 import Index from "../dashboard/Index";
 import Payment from "../payments/DoPayment/Payment";
 import PaymentSuccess from "../payments/PaymentSuccess";
+import Payments from "../payments/Payments";
 
 export const router = createBrowserRouter([
   {
@@ -59,7 +60,7 @@ export const router = createBrowserRouter([
     },
     {
       path: "payments",
-      element: <Private><Payment></Payment></Private>
+      element: <Private><Payments></Payments></Private>
     },
     // {
     {

@@ -1,9 +1,10 @@
 // import React from 'react';
-
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import { getAdditionalUserInfo } from "firebase/auth";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../hooks/useAxios";
 
 const LoginPage = () => {
 
@@ -11,6 +12,7 @@ const LoginPage = () => {
     // const go_to = useNavigate();
     const location = useLocation();
     const navigate = useNavigate();
+    const axios = useAxiosSecure();
     // if (user) {
     //   go_to("/");
     // }
@@ -30,6 +32,35 @@ const LoginPage = () => {
         // e.preventDefault();
         try {
             const res_login = await goWithGoogle();
+            
+            const user = res_login.user;
+            const info = getAdditionalUserInfo(res_login);
+            const isNewUser = info?.isNewUser;
+            // const isNewUser = res_login._tokenResponse.isNewUser;
+
+            if (isNewUser) {
+              try {
+                await axios.post("/add_user", {
+                  uid: user.uid,
+                  displayName: user.displayName,
+                  email: user.email,
+                  role: "user",
+                });
+              } catch (err) {
+                await Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: err,
+                  timer: 1500,
+                  showConfirmButton: false,
+                });
+                console.error("User save failed:", err);
+              }
+            } else {
+              // Existing user → no DB insert
+              console.log("Existing user");
+            }
+
             if (res_login) {
                 // await Swal.fire
                 await Swal.fire({
