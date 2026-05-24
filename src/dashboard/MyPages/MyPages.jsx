@@ -27,16 +27,16 @@ const MyPages = () => {
       return res.data;
     };
 
-    const {
-      data,
-      isLoading,
-      isError,
-    } = useQuery({
-      queryKey: ["pages", user?.uid, page],
-      queryFn: fetchPages,
-      enabled: !!user?.uid,
-      refetchOnWindowFocus: true,
-    });
+   const {
+  data,
+  isLoading,
+  isError,
+} = useQuery({
+  queryKey: ["pages", user?.uid, page],
+  queryFn: fetchPages,
+  enabled: !!user?.uid,
+  refetchOnWindowFocus: true,
+});
 
   const pages = data?.data || [];
   const pagination = data?.pagination;
