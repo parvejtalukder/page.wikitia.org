@@ -49,6 +49,8 @@ const AuthProvider = ({children}) => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             // queryClient.clear();
             setUser(currentUser);
+            // queryClient.clear();
+            queryClient.refetchQueries();
             setLoading(false);
         });
         return () => {

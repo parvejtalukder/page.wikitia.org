@@ -25,7 +25,7 @@ const Dashboard = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-
+        // window.location.reload();
       } catch (error) {
         await Swal.fire({
           icon: 'error',

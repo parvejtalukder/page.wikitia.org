@@ -72,6 +72,7 @@ const LoginPage = () => {
                 });
                 // navigate(location?.pathname || "/");
                 navigate(from, { replace: true });
+                // window.location.reload();
             } else {
                await Swal.fire({
                   icon: 'warning',

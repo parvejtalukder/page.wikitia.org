@@ -10,11 +10,11 @@ const MyPages = () => {
   const [page, setPage] = useState(1);
   const limit = 5;
   const axios = useAxiosSecure();  
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   
     const fetchPages = async () => {
-      const token = await user.getIdToken();
+      const token = await user.getIdToken(true);
       const res = await axios.get(
         `/get_pages?page=${page}&limit=${limit}`,
         {
@@ -33,7 +33,7 @@ const MyPages = () => {
     } = useQuery({
       queryKey: ["pages", user?.uid, page],
       queryFn: fetchPages,
-      enabled: !!user?.uid,
+      enabled: !!user?.uid && !loading,
       refetchOnWindowFocus: true,
       staleTime: 0,
       gcTime: 0,
