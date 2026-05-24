@@ -12,7 +12,7 @@ const linkClass = ({ isActive }) =>
 
 const Dashboard = () => {
 
-    const { logOut } = useAuth();
+    const { logOut, user } = useAuth();
 
       const logOutGo = async () => {
       try {
@@ -57,7 +57,7 @@ const Dashboard = () => {
 
         {/* PAGE CONTENT */}
         <div className="p-4">
-          <Outlet />
+          <Outlet key={user?.uid} />
         </div>
       </div>
 

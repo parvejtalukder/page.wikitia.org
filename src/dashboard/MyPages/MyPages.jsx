@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 // import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxios";
-import { useState } from "react";
+import {  useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 const MyPages = () => {
@@ -13,32 +13,34 @@ const MyPages = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  const fetchPages = async () => {
-      if (!user) return;
+    const fetchPages = async () => {
       const token = await user.getIdToken();
       const res = await axios.get(
-      `http://localhost:3000/get_pages?page=${page}&limit=${limit}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+        `/get_pages?page=${page}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return res.data;
     };
 
-   const {
-  data,
-  isLoading,
-  isError,
-} = useQuery({
-  queryKey: ["pages", user?.uid, page],
-  queryFn: fetchPages,
-  enabled: !!user?.uid,
-  refetchOnWindowFocus: true,
-});
+    const {
+      data,
+      isLoading,
+      isError,
+    } = useQuery({
+      queryKey: ["pages", user?.uid, page],
+      queryFn: fetchPages,
+      enabled: !!user?.uid,
+      refetchOnWindowFocus: true,
+      staleTime: 0,
+      gcTime: 0,
+      keepPreviousData: false,
+    });
 
-  const pages = data?.data || [];
+  const pages = user?.uid && data?.data ? data.data : [];
   const pagination = data?.pagination;
 
   if (isLoading) {

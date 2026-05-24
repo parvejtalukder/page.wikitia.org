@@ -32,11 +32,13 @@ const AuthProvider = ({children}) => {
     }
 
     const logOut = async () => {
-        setLoading(true)
+        setLoading(true);
         await signOut(auth);
-        queryClient.clear();
-        // signOut(auth);
+        // queryClient.clear();
+        queryClient.removeQueries({ queryKey: ["pages"] });
+        queryClient.removeQueries({ queryKey: ["payments"] });
         setUser(null);
+        setLoading(false);
     }
 
     const updateUser = (profile) => {
@@ -45,7 +47,7 @@ const AuthProvider = ({children}) => {
 
     useEffect( () => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-            queryClient.clear();
+            // queryClient.clear();
             setUser(currentUser);
             setLoading(false);
         });
