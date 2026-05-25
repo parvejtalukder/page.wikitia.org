@@ -16,6 +16,10 @@ import Payment from "../payments/DoPayment/Payment";
 import PaymentSuccess from "../payments/PaymentSuccess";
 import Payments from "../payments/Payments";
 import AdminDashboard from "../layout/AdminDashboard";
+import Profile from "../dashboard/settings/Profile/Profile";
+import EditPage from "../dashboard/EditPage/EditPage";
+import MyEdits from "../dashboard/MyEdits/MyEdits";
+import MyEditDetails from "../dashboard/MyEdits/MyEditDetails";
 
 export const router = createBrowserRouter([
   {
@@ -71,6 +75,10 @@ export const router = createBrowserRouter([
       element: <Private><CreateWikiPage /></Private>,
     },
     {
+      path: "profile",
+      element: <Private><Profile /></Private>,
+    },
+    {
       path: "payments",
       element: <Private><Payments></Payments></Private>
     },
@@ -83,10 +91,10 @@ export const router = createBrowserRouter([
       path: "payment/done",
       element: <Private><PaymentSuccess></PaymentSuccess></Private>
     },
-    // {
-    //   path: "edit-page/:pageId?",
-    //   element: <Private><EditWikiPage /></Private>,
-    // },
+    {
+      path: "edit-page",
+      element: <Private><EditPage /></Private>,
+    },
     // {
     //   path: "add-image/:pageId?",
     //   element: <Private><AddImageToWiki /></Private>,
@@ -98,6 +106,14 @@ export const router = createBrowserRouter([
     {
       path: "my-pages",
       element: <Private><MyPages /></Private>,
+    },
+    {
+      path: "my-edits",
+      element: <Private><MyEdits /></Private>,
+    },
+    {
+      path: "my-edits/:id",
+      element: <Private><MyEditDetails /></Private>,
     },
     {
       path: "my-pages/:id",

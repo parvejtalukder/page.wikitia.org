@@ -1,10 +1,11 @@
 // import React from "react";
-import { FiPlusCircle, FiEdit2, FiImage, FiBookOpen, FiLogOut } from "react-icons/fi";
+import { FiPlusCircle, FiEdit2, FiImage, FiBookOpen, FiLogOut, FiEdit3 } from "react-icons/fi";
 import { FiHome, FiSettings } from "react-icons/fi";
 import { FiCreditCard } from "react-icons/fi";
 import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import { ImProfile } from "react-icons/im";
 
 const linkClass = ({ isActive }) =>
   `flex items-center gap-2 px-3 py-2 rounded-md transition
@@ -104,9 +105,9 @@ const Dashboard = () => {
           </li>
         
           <li>
-            <NavLink to="/dashboard/add-media" className={linkClass}>
-              <FiImage />
-              <span className="ml-2">Add Media</span>
+            <NavLink to="/dashboard/my-edits" className={linkClass}>
+              <FiEdit3 />
+              <span className="ml-2">Edit Requests</span>
             </NavLink>
           </li>
         
@@ -120,7 +121,7 @@ const Dashboard = () => {
           <li>
             <NavLink to="/dashboard/my-pages" className={linkClass}>
               <FiBookOpen />
-              <span className="ml-2">My Pages</span>
+              <span className="ml-2">Pages Requests</span>
             </NavLink>
           </li>
         
@@ -137,10 +138,10 @@ const Dashboard = () => {
           </li>
         
           <li>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-base-200">
-              <FiSettings />
-              <span className="ml-2">Settings</span>
-            </button>
+            <NavLink to={"/dashboard/profile"} className={linkClass}>
+              <ImProfile />
+              <span className="ml-2">Profile</span>
+            </NavLink>
           </li>
         
           <li>
