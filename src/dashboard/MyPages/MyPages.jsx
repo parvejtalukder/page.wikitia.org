@@ -1,34 +1,32 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 // import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxios";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 
 const MyPages = () => {
 
   const [page, setPage] = useState(1);
   const limit = 5;
+
   const axios = useAxiosSecure();  
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   
     const fetchPages = async () => {
-      const token = await user.getIdToken(true);
+      if (!user?.uid) throw new Error("No user logged in");
+      // const token = await user.getIdToken(true);
       const res = await axios.get(
-        `/get_pages?page=${page}&limit=${limit}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        `/get_pages?page=${page}&limit=${limit}`);
       return res.data;
     };
 
     const {
       data,
       isLoading,
+      isFetching,
       isError,
     } = useQuery({
       queryKey: ["pages", user?.uid, page],
@@ -39,6 +37,25 @@ const MyPages = () => {
       gcTime: 0,
       keepPreviousData: false,
     });
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user?.uid) {
+      queryClient.refetchQueries({ queryKey: ["pages"] });
+      setPage(1);
+    } else {
+      queryClient.invalidateQueries({ queryKey: ["pages", user.uid], exact: false });
+      setPage(1);
+    }
+
+  }, [user?.uid, loading, queryClient]);
+
+    useEffect(() => {
+    if (user?.uid) {
+      setPage(1);
+    }
+  }, [user?.uid]);
 
   const pages = user?.uid && data?.data ? data.data : [];
   const pagination = data?.pagination;
@@ -59,6 +76,12 @@ const MyPages = () => {
       </div>
     );
   }
+
+  {isFetching && (
+        <div className="bg-blue-50 p-2 text-center text-sm text-blue-600 border-b">
+          Refreshing payment data...
+        </div>
+  )}
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
@@ -195,29 +218,53 @@ const MyPages = () => {
 
         </tbody>
       </table>
-      <div className="flex bg-blue-100 items-center justify-between mt-4">
+      {pagination && pagination.totalPages > 0 && (
+        <div className="flex items-center justify-between mt-4 p-4 bg-gray-50 rounded-b-2xl">
           <button
-            disabled={page === 1}
+            disabled={page === 1 || isFetching}
             onClick={() => setPage((p) => p - 1)}
-            className="px-4 py-0.5 bg-gray-200 rounded disabled:opacity-50"
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
           >
             Previous
           </button>
-          
+
           <p className="text-sm text-gray-600">
-            Page {page} of {pagination?.totalPages || 1}
+            Page {page} of {pagination.totalPages}
           </p>
-          
+
           <button
-            disabled={page === pagination?.totalPages}
+            disabled={page === pagination.totalPages || isFetching}
             onClick={() => setPage((p) => p + 1)}
-            className="px-4 py-0.5 bg-gray-200 rounded disabled:opacity-50"
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 hover:bg-gray-300 transition"
           >
             Next
           </button>
         </div>
+      )}
     </div>
   );
 };
 
 export default MyPages;
+
+      // <div className="flex bg-blue-100 items-center justify-between mt-4">
+      //     <button
+      //       disabled={page === 1}
+      //       onClick={() => setPage((p) => p - 1)}
+      //       className="px-4 py-0.5 bg-gray-200 rounded disabled:opacity-50"
+      //     >
+      //       Previous
+      //     </button>
+          
+      //     <p className="text-sm text-gray-600">
+      //       Page {page} of {pagination?.totalPages || 1}
+      //     </p>
+          
+      //     <button
+      //       disabled={page === pagination?.totalPages}
+      //       onClick={() => setPage((p) => p + 1)}
+      //       className="px-4 py-0.5 bg-gray-200 rounded disabled:opacity-50"
+      //     >
+      //       Next
+      //     </button>
+      //   </div>

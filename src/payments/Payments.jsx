@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query"; // ✅ Added useQueryClient
-import { useState, useEffect } from "react"; // ✅ Added useEffect
+import { useQuery, useQueryClient } from "@tanstack/react-query"; 
+import { useState, useEffect } from "react"; 
 import useAxiosSecure from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 
@@ -8,22 +8,14 @@ const Payments = () => {
   const limit = 5;
 
   const axios = useAxiosSecure();
-  const { user, loading } = useAuth(); // ✅ Added loading state
-  const queryClient = useQueryClient(); // ✅ Get global queryClient
+  const { user, loading } = useAuth(); 
+  const queryClient = useQueryClient(); 
 
   const fetchPayments = async () => {
     if (!user?.uid) throw new Error("No user logged in");
-    
-    const token = await user.getIdToken(true); // ✅ Force token refresh
+    // const token = await user.getIdToken(true); 
     const res = await axios.get(
-      `/get_payments?page=${page}&limit=${limit}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+      `/get_payments?page=${page}&limit=${limit}`);
     return res.data;
   };
 
@@ -31,11 +23,11 @@ const Payments = () => {
     data, 
     isLoading, 
     isError, 
-    isFetching // ✅ Added to show refresh state
+    isFetching 
   } = useQuery({
-    queryKey: ["payments", user?.uid, page], // ✅ Includes user ID
+    queryKey: ["payments", user?.uid, page], 
     queryFn: fetchPayments,
-    enabled: !!user?.uid && !loading, // ✅ Wait for loading to complete
+    enabled: !!user?.uid && !loading, 
     refetchOnWindowFocus: true,
     staleTime: 0,
     gcTime: 0,

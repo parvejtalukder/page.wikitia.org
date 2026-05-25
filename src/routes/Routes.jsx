@@ -15,6 +15,7 @@ import Index from "../dashboard/Index";
 import Payment from "../payments/DoPayment/Payment";
 import PaymentSuccess from "../payments/PaymentSuccess";
 import Payments from "../payments/Payments";
+import AdminDashboard from "../layout/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,17 @@ export const router = createBrowserRouter([
       { 
         path: "register",
         Component: Register,
+      }
+    ],
+  },
+  {
+    path: "/admin",
+    Component: AdminDashboard,
+    children: [
+      {
+      index: true,
+        // Component: LoginPage,
+        // element: <Private><AdminDashboard></AdminDashboard></Private>
       }
     ],
   },

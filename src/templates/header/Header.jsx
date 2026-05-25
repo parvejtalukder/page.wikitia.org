@@ -5,6 +5,7 @@ import Open from "../../assets/open.svg"
 import { useState } from "react";
 import Mobile from "../../components/mobile/Mobile";
 import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 // import Swal from "sweetalert2";
 
 const links = 
@@ -53,6 +54,9 @@ const Header = () => {
   }
 
   const { user } = useAuth();
+  const { role } = useRole();
+
+  console.log(role);
 
     return (
       <>

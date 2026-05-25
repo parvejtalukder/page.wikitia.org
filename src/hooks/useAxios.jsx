@@ -1,23 +1,25 @@
 import axios from 'axios';
 import useAuth from './useAuth';
-import { useEffect } from 'react';
 
 const server_domain = import.meta.env.VITE_SERVER;
 
-const axiosSecure = axios.create({
-    baseURL: server_domain
-})
-
 const useAxiosSecure = () => {
-
     const { user } = useAuth();
 
-    useEffect(() => {
-        axiosSecure.interceptors.request.use((config) => {
-            config.headers.Authorization = `Bearer ${user?.accessToken}`
+    const axiosSecure = axios.create({
+        baseURL: server_domain,
+    });
+
+    // Add interceptor every time (simple and works)
+    axiosSecure.interceptors.request.use(
+        async (config) => {
+            if (user?.uid) {
+                const token = await user.getIdToken(true);
+                config.headers.Authorization = `Bearer ${token}`;
+            }
             return config;
-        })
-    } ,[user])
+        }
+    );
 
     return axiosSecure;
 };
