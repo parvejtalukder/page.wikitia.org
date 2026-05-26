@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxios";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+// import { useNavigate } from "react-router";
 import { 
   FileText, 
   Eye, 
@@ -15,15 +15,15 @@ import {
   XCircle,
   Clock,
   DollarSign,
-  User,
-  Calendar,
+  // User,
+  // Calendar,
   Building2,
   Globe,
   Mail,
-  Phone,
-  MapPin,
+  // Phone,
+  // MapPin,
   ExternalLink,
-  Image as ImageIcon,
+  // Image as ImageIcon,
   ThumbsUp,
   ThumbsDown,
   Loader2
@@ -35,11 +35,12 @@ const PageCreationRequests = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("payment review");
   const limit = 10;
 
   const axios = useAxiosSecure();  
   const { user, loading } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const queryClient = useQueryClient();
   
   const fetchRequests = async () => {
@@ -63,8 +64,31 @@ const PageCreationRequests = () => {
     gcTime: 0,
   });
 
-  const requests = data?.data || [];
+  const allRequests = data?.data || [];
   const pagination = data?.pagination;
+
+  // Filter requests based on active tab
+  const getFilteredRequests = () => {
+    switch(activeTab) {
+      case "approved":
+        return allRequests.filter(r => r.status === "approved");
+      case "payment review":
+        return allRequests.filter(r => r.status === "payment review");
+      case "rejected":
+        return allRequests.filter(r => r.status === "rejected");
+      default:
+        return allRequests;
+    }
+  };
+
+  const filteredRequests = getFilteredRequests();
+
+  // Get counts for each tab
+  const tabCounts = {
+    "payment review": allRequests.filter(r => r.status === "payment review").length,
+    "approved": allRequests.filter(r => r.status === "approved").length,
+    "rejected": allRequests.filter(r => r.status === "rejected").length
+  };
 
   const getStatusBadge = (status) => {
     const styles = {
@@ -113,10 +137,7 @@ const PageCreationRequests = () => {
     if (result.isConfirmed) {
       setActionLoading(true);
       try {
-        const response = await axios.put(`/admin/page-creation-requests/${request._id}/approve`, {
-          adminId: user.uid,
-          adminEmail: user.email
-        });
+        const response = await axios.put(`/admin/page-creation-requests/${request._id}/approve`);
         
         if (response.data.success) {
           await Swal.fire({
@@ -142,31 +163,33 @@ const PageCreationRequests = () => {
   };
 
   const handleReject = async (request) => {
+
     const { value: reason } = await Swal.fire({
-      title: 'Reject Page Creation',
-      html: `
-        <div class="text-left">
-          <p class="mb-3">You are about to reject <strong>${request.identity?.name}</strong>.</p>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Reason for rejection:</label>
-          <textarea id="rejection-reason" class="swal2-textarea" rows="3" placeholder="Please provide a reason..."></textarea>
-        </div>
-      `,
-      icon: 'warning',
+      title: "Reject Page Creation",
+      text: `You are about to reject ${request.identity?.name}`,
+      input: "textarea",
+      inputLabel: "Reason for rejection",
+      inputPlaceholder: "Please provide a reason...",
+      inputAttributes: {
+        "aria-label": "Reason for rejection"
+      },
       showCancelButton: true,
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#6b7280',
-      confirmButtonText: 'Yes, reject',
-      cancelButtonText: 'Cancel',
-      preConfirm: () => {
-        const reason = document.getElementById('rejection-reason').value;
-        if (!reason) {
-          Swal.showValidationMessage('Please provide a reason for rejection');
+      icon: "warning",
+
+      confirmButtonText: "Yes, reject",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return "Please provide a reason for rejection";
         }
-        return reason;
       }
     });
 
     if (reason) {
+      console.log(reason);
       setActionLoading(true);
       try {
         const response = await axios.put(`/admin/page-creation-requests/${request._id}/reject`, {
@@ -198,58 +221,16 @@ const PageCreationRequests = () => {
     }
   };
 
-  const handleVerifyPayment = async (request) => {
-    const result = await Swal.fire({
-      title: 'Verify Payment',
-      html: `
-        <div class="text-left">
-          <p>Verify payment for <strong>${request.identity?.name}</strong></p>
-          <p class="text-sm text-gray-600 mt-2">Amount: $${request.charge}</p>
-          <p class="text-sm text-gray-600">Status: ${request.paid ? 'Paid' : 'Not Paid'}</p>
-        </div>
-      `,
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonColor: '#3b82f6',
-      confirmButtonText: 'Verify Payment',
-      cancelButtonText: 'Cancel'
-    });
-
-    if (result.isConfirmed) {
-      setActionLoading(true);
-      try {
-        const response = await axios.put(`/admin/page-creation-requests/${request._id}/verify-payment`, {
-          adminId: user.uid,
-          adminEmail: user.email
-        });
-        
-        if (response.data.success) {
-          await Swal.fire({
-            icon: 'success',
-            title: 'Payment Verified!',
-            text: 'Payment has been verified. You can now approve the page.',
-            timer: 2000,
-            showConfirmButton: false
-          });
-          queryClient.invalidateQueries({ queryKey: ["page-creation-requests"] });
-          refetch();
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'Failed to verify payment',
-        });
-      } finally {
-        setActionLoading(false);
-      }
-    }
-  };
-
   const viewDetails = (request) => {
     setSelectedRequest(request);
     setIsModalOpen(true);
   };
+
+  const tabs = [
+    { id: "payment review", label: "Payment Review", icon: DollarSign, color: "amber" },
+    { id: "approved", label: "Approved", icon: CheckCircle, color: "emerald" },
+    { id: "rejected", label: "Rejected", icon: XCircle, color: "red" }
+  ];
 
   if (isLoading) {
     return (
@@ -303,7 +284,7 @@ const PageCreationRequests = () => {
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -318,7 +299,7 @@ const PageCreationRequests = () => {
             <div>
               <p className="text-sm text-gray-500">Payment Review</p>
               <p className="text-2xl font-bold text-amber-600">
-                {requests.filter(r => r.status === 'payment review').length}
+                {tabCounts["payment review"]}
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-amber-500" />
@@ -327,20 +308,9 @@ const PageCreationRequests = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Pending Payment</p>
-              <p className="text-2xl font-bold text-blue-600">
-                {requests.filter(r => r.status === 'pending').length}
-              </p>
-            </div>
-            <Clock className="w-8 h-8 text-blue-500" />
-          </div>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
               <p className="text-sm text-gray-500">Total Revenue</p>
               <p className="text-2xl font-bold text-green-600">
-                ${requests.reduce((sum, r) => r.paid ? sum + (r.charge || 0) : sum, 0)}
+                ${allRequests.reduce((sum, r) => r.paid ? sum + (r.charge || 0) : sum, 0)}
               </p>
             </div>
             <CreditCard className="w-8 h-8 text-green-500" />
@@ -348,7 +318,45 @@ const PageCreationRequests = () => {
         </div>
       </div>
 
-      {/* Requests Table */}
+      {/* Tabs */}
+      <div className="border-b border-gray-200 mb-6">
+        <nav className="flex gap-2">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            const count = tabCounts[tab.id];
+            const colorClasses = {
+              amber: isActive ? "border-amber-500 text-amber-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+              emerald: isActive ? "border-emerald-500 text-emerald-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+              red: isActive ? "border-red-500 text-red-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            };
+            
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors
+                  ${colorClasses[tab.color]}
+                `}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+                {count > 0 && (
+                  <span className={`
+                    ml-1 px-2 py-0.5 text-xs rounded-full
+                    ${isActive ? `bg-${tab.color}-100 text-${tab.color}-700` : 'bg-gray-100 text-gray-600'}
+                  `}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Tab Content - Requests Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {isFetching && (
           <div className="bg-indigo-50 p-2 text-center text-sm text-indigo-600 border-b border-indigo-100">
@@ -370,8 +378,8 @@ const PageCreationRequests = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {requests.length > 0 ? (
-                requests.map((request) => (
+              {filteredRequests.length > 0 ? (
+                filteredRequests.map((request) => (
                   <tr key={request._id} className="hover:bg-gray-50 transition">
                     {/* PAGE INFO */}
                     <td className="px-6 py-4">
@@ -458,18 +466,7 @@ const PageCreationRequests = () => {
                           View
                         </button>
                         
-                        {request.status === 'payment review' && request.paid && (
-                          <button 
-                            onClick={() => handleVerifyPayment(request)}
-                            disabled={actionLoading}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                          >
-                            <CreditCard className="w-3.5 h-3.5" />
-                            Verify
-                          </button>
-                        )}
-                        
-                        {(request.status === 'pending' || (request.status === 'payment review' && request.paid)) && (
+                        {activeTab === "payment review" && request.paid && (
                           <>
                             <button 
                               onClick={() => handleApprove(request)}
@@ -497,7 +494,7 @@ const PageCreationRequests = () => {
                 <tr>
                   <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                     <FileText className="w-12 h-12 mx-auto text-gray-300 mb-3" />
-                    No page creation requests found
+                    No {activeTab} requests found
                   </td>
                 </tr>
               )}
@@ -532,7 +529,7 @@ const PageCreationRequests = () => {
 
       {/* Details Modal */}
       {isModalOpen && selectedRequest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setIsModalOpen(false)}>
+        <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setIsModalOpen(false)}>
           <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-900">Request Details</h2>
@@ -627,7 +624,7 @@ const PageCreationRequests = () => {
 
               {/* Action Buttons in Modal */}
               <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
-                {(selectedRequest.status === 'pending' || (selectedRequest.status === 'payment review' && selectedRequest.paid)) && (
+                {(selectedRequest.status === 'payment review' && selectedRequest.paid) && (
                   <>
                     <button
                       onClick={() => {
@@ -659,7 +656,7 @@ const PageCreationRequests = () => {
 
       {/* Loading Overlay for Actions */}
       {actionLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 flex items-center gap-3">
             <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
             <span className="text-gray-700">Processing...</span>
