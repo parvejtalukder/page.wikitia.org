@@ -235,9 +235,9 @@ const EditPage = () => {
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
                                         >
                                             <option value="">Select action</option>
-                                            <option value="add">➕ Add New Media</option>
-                                            <option value="replace">🔄 Replace Existing Media</option>
-                                            <option value="remove">❌ Remove Media</option>
+                                            <option value="add">Add New Media</option>
+                                            <option value="replace">Replace Existing Media</option>
+                                            <option value="remove">Remove Media</option>
                                         </select>
                                     </div>
 
@@ -249,10 +249,10 @@ const EditPage = () => {
                                             {...register("mediaType", { required: "Media type is required" })}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
                                         >
-                                            <option value="image">🖼️ Image</option>
-                                            <option value="video">🎥 Video</option>
-                                            <option value="audio">🎵 Audio</option>
-                                            <option value="document">📄 Document</option>
+                                            <option value="image">Image</option>
+                                            <option value="video">Video</option>
+                                            <option value="audio">Audio</option>
+                                            <option value="document">Document</option>
                                         </select>
                                     </div>
                                 </div>
@@ -308,10 +308,10 @@ const EditPage = () => {
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
                                     >
                                         <option value="">Select position</option>
-                                        <option value="infobox">📦 Infobox</option>
-                                        <option value="gallery">🖼️ Gallery</option>
-                                        <option value="content">📝 Content Section</option>
-                                        <option value="top">⬆️ Top of Page</option>
+                                        <option value="infobox">Infobox</option>
+                                        <option value="gallery">Gallery</option>
+                                        <option value="content">Content Section</option>
+                                        <option value="top">Top of Page</option>
                                     </select>
                                 </div>
                             </div>
