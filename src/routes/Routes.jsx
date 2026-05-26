@@ -20,6 +20,8 @@ import Profile from "../dashboard/settings/Profile/Profile";
 import EditPage from "../dashboard/EditPage/EditPage";
 import MyEdits from "../dashboard/MyEdits/MyEdits";
 import MyEditDetails from "../dashboard/MyEdits/MyEditDetails";
+import PageCreationRequests from "../admin/PageCreationRequests/PageCreationRequests";
+import AdminRoute from "./admin/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -52,16 +54,19 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
-    Component: AdminDashboard,
-    children: [
-      {
-      index: true,
-        // Component: LoginPage,
-        // element: <Private><AdminDashboard></AdminDashboard></Private>
-      }
-    ],
-  },
+  path: "/admin",
+  element: (
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  ),
+  children: [
+    {
+      path: "create-page-requests",
+      element: <PageCreationRequests />
+    }
+  ],
+},
   {
   path: "/dashboard",
   element: <Private><Dashboard /></Private>,

@@ -1,81 +1,59 @@
 // import React from "react";
-import {
-  FiHome,
-  FiUsers,
-  FiSettings,
-  FiLogOut,
-  FiBookOpen,
-  FiImage,
-  FiCreditCard,
-  FiCheckCircle,
-  FiAlertCircle,
-} from "react-icons/fi";
-
+import { FiPlusCircle, FiEdit2, FiImage, FiBookOpen, FiLogOut, FiEdit3 } from "react-icons/fi";
+import { FiHome, FiSettings } from "react-icons/fi";
+import { FiCreditCard } from "react-icons/fi";
 import { Link, NavLink, Outlet } from "react-router";
-// import useAuth from "../hooks/useAuth";
-import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
+import { ImProfile } from "react-icons/im";
 
 const linkClass = ({ isActive }) =>
   `flex items-center gap-2 px-3 py-2 rounded-md transition
-   ${
-     isActive
-       ? "bg-base-300 font-medium text-primary"
-       : "hover:bg-base-200"
-   }`;
+   ${isActive ? "bg-base-300 font-medium text-primary" : "hover:bg-base-200"}`;
 
 const AdminDashboard = () => {
-  const { logOut, user } = useAuth();
 
-  const logOutGo = async () => {
-    try {
-      await logOut();
+    const { logOut, user } = useAuth();
 
-      await Swal.fire({
-        icon: "success",
-        title: "Logged Out",
-        text: "You have been logged out successfully.",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      await Swal.fire({
-        icon: "error",
-        title: "Failed to Log Out",
-        text: error.message || "Something went wrong",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    }
-  };
+      const logOutGo = async () => {
+      try {
+        await logOut();
 
-  return (
+        await Swal.fire({
+          icon: 'success',
+          title: 'Logged Out',
+          text: 'You have been logged out successfully.',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        // window.location.reload();
+      } catch (error) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Failed to Log Out',
+          text: error.message || 'Something went wrong',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    };
+
+    return (
     <div className="drawer lg:drawer-open">
-      <input id="admin-drawer" type="checkbox" className="drawer-toggle" />
+      <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
       {/* MAIN CONTENT */}
       <div className="drawer-content">
         {/* NAVBAR */}
         <nav className="navbar bg-base-300 w-full">
           <label
-            htmlFor="admin-drawer"
+            htmlFor="my-drawer-4"
             className="btn btn-square btn-ghost lg:hidden"
           >
             ☰
           </label>
 
-          <div className="flex-1 px-4">
-            <Link
-              to="/admin-dashboard"
-              className="text-xl font-bold"
-            >
-              Wikitia Admin
-            </Link>
-          </div>
-
-          <div className="pr-4 text-sm opacity-70">
-            {user?.email}
-          </div>
+          <Link to={"/dashboard"} className="px-4 text-xl font-bold">Wikitia Dashboard</Link>
         </nav>
 
         {/* PAGE CONTENT */}
@@ -86,145 +64,97 @@ const AdminDashboard = () => {
 
       {/* SIDEBAR */}
       <div className="drawer-side">
-        <label
-          htmlFor="admin-drawer"
-          className="drawer-overlay"
-        ></label>
+        <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
 
-        <aside className="min-h-full w-72 bg-base-200 flex flex-col border-r border-base-300">
-          <div className="p-4 border-b border-base-300">
-            <h2 className="text-xl font-bold">
-              Admin Panel
-            </h2>
+        <aside className="min-h-full w-64 bg-base-200 flex flex-col">
 
-            <p className="text-sm opacity-70 mt-1">
-              Manage users, pages, payments & moderation
-            </p>
-          </div>
+        <ul className="menu w-full grow p-2 space-y-1">
+        
+          {/* HOME */}
+          <li>
+            <NavLink to="/" className={linkClass}>
+              <FiHome className="text-lg" />
+              <span className="ml-2">Home</span>
+            </NavLink>
+          </li>
+        
+          {/* WIKI TITLE */}
+          <Link to={"/admin"} className="menu-title mt-2">
+            <span>Admin Portal</span>
+          </Link>
+        
+          {/* <li>
+            <NavLink to="/dashboard/home" className={linkClass}>
+              <FiPlusCircle />
+              <span className="ml-2">Dashboard</span>
+            </NavLink>
 
-          <ul className="menu w-full grow p-3 space-y-1">
-
-            {/* HOME */}
-            <li>
-              <NavLink to="/" className={linkClass}>
-                <FiHome className="text-lg" />
-                <span>Home</span>
-              </NavLink>
-            </li>
-
-            {/* DASHBOARD */}
-            <li>
-              <NavLink
-                to="/admin-dashboard"
-                end
-                className={linkClass}
-              >
-                <FiSettings className="text-lg" />
-                <span>Admin Overview</span>
-              </NavLink>
-            </li>
-
-            {/* PAGE MANAGEMENT */}
-            <li className="menu-title mt-4">
-              <span>Page Management</span>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/all-pages"
-                className={linkClass}
-              >
-                <FiBookOpen />
-                <span>All Pages</span>
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/pending-pages"
-                className={linkClass}
-              >
-                <FiAlertCircle />
-                <span>Pending Pages</span>
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/approved-pages"
-                className={linkClass}
-              >
-                <FiCheckCircle />
-                <span>Approved Pages</span>
-              </NavLink>
-            </li>
-
-            {/* <li>
-              <NavLink
-                to="/admin-dashboard/media-library"
-                className={linkClass}
-              >
-                <FiImage />
-                <span>Media Library</span>
-              </NavLink>
-            </li> */}
-
-            {/* USER MANAGEMENT */}
-            <li className="menu-title mt-4">
-              <span>User Management</span>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/manage-users"
-                className={linkClass}
-              >
-                <FiUsers />
-                <span>Manage Users</span>
-              </NavLink>
-            </li>
-
-            {/* PAYMENT */}
-            <li className="menu-title mt-4">
-              <span>Payments</span>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/all-payments"
-                className={linkClass}
-              >
-                <FiCreditCard />
-                <span>All Payments</span>
-              </NavLink>
-            </li>
-
-            {/* SETTINGS */}
-            <li className="menu-title mt-4">
-              <span>System</span>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin-dashboard/settings"
-                className={linkClass}
-              >
-                <FiSettings />
-                <span>Admin Settings</span>
-              </NavLink>
-            </li>
-
-            {/* LOGOUT */}
-            <li className="mt-4">
-              <button
-                onClick={logOutGo}
-                className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-base-300 transition"
-              >
-                <FiLogOut />
-                <span>Log Out</span>
-              </button>
-            </li>
-          </ul>
+          </li> */}
+          <li>
+            <NavLink to="/admin/create-page-requests" className={linkClass}>
+              <FiPlusCircle />
+              <span className="ml-2">Create Page Requests</span>
+            </NavLink>
+          </li>
+        
+          <li>
+            <NavLink to="/dashboard/edit-page" className={linkClass}>
+              <FiEdit2 />
+              <span className="ml-2">Edit Page</span>
+            </NavLink>
+          </li>
+        
+          <li>
+            <NavLink to="/dashboard/my-edits" className={linkClass}>
+              <FiEdit3 />
+              <span className="ml-2">Edit Requests</span>
+            </NavLink>
+          </li>
+        
+          {/* <li>
+            <NavLink to="/dashboard/add-video" className={linkClass}>
+              <FiVideo />
+              <span className="ml-2">Add Video</span>
+            </NavLink>
+          </li> */}
+        
+          <li>
+            <NavLink to="/dashboard/my-pages" className={linkClass}>
+              <FiBookOpen />
+              <span className="ml-2">Pages Requests</span>
+            </NavLink>
+          </li>
+        
+          {/* ACCOUNT */}
+          <li className="menu-title mt-4">
+            <span>Account</span>
+          </li>
+        
+          <li>
+            <NavLink to="/dashboard/payments" className={linkClass}>
+              <FiCreditCard />
+              <span className="ml-2">Payments</span>
+            </NavLink>
+          </li>
+        
+          <li>
+            <NavLink to={"/dashboard/profile"} className={linkClass}>
+              <ImProfile />
+              <span className="ml-2">Profile</span>
+            </NavLink>
+          </li>
+        
+          <li>
+            <button
+              onClick={logOutGo}
+              className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-base-200"
+            >
+              <FiLogOut />
+              <span className="ml-2">Log Out</span>
+            </button>
+          </li>
+        
+        </ul>
         </aside>
       </div>
     </div>
