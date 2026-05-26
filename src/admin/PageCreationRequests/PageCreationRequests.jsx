@@ -327,7 +327,7 @@ const PageCreationRequests = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Pending Approval</p>
+              <p className="text-sm text-gray-500">Pending Payment</p>
               <p className="text-2xl font-bold text-blue-600">
                 {requests.filter(r => r.status === 'pending').length}
               </p>

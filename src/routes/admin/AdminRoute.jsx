@@ -6,22 +6,12 @@ const AdminRoute = ({ children }) => {
   const { user, loading, role, roleLoading } = useAuth();
   const location = useLocation();
 
-  console.log("=== ADMIN ROUTE DEBUG ===");
-  console.log("USER:", user);
-  console.log("LOADING:", loading);
-  console.log("ROLE:", role);
-  console.log("ROLE LOADING:", roleLoading);
-  console.log("LOCATION:", location.pathname);
-
   if (loading || roleLoading) {
-    console.log("SHOWING LOADER...");
     return <Loader />;
   }
 
   // Not logged in
   if (!user) {
-    console.log("NO USER -> REDIRECT LOGIN");
-
     return (
       <Navigate
         to="/login"
@@ -33,8 +23,6 @@ const AdminRoute = ({ children }) => {
 
   // Logged in but not admin
   if (role !== "admin") {
-    console.log("NOT ADMIN -> REDIRECT DASHBOARD");
-
     return (
       <Navigate
         to="/dashboard"
@@ -42,9 +30,6 @@ const AdminRoute = ({ children }) => {
       />
     );
   }
-
-  console.log("ADMIN ACCESS GRANTED");
-
   // Is admin - render children
   return children;
 };

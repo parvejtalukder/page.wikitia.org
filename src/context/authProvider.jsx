@@ -60,17 +60,22 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setLoading(true);
+
       setUser(currentUser);
+
       if (!currentUser) {
         setRole(null);
         setRoleLoading(false);
         setLoading(false);
         return;
       }
+
       const fetchRole = async () => {
         try {
           setRoleLoading(true);
+
           const token = await currentUser.getIdToken();
+
           const res = await fetch(
             `${import.meta.env.VITE_SERVER}users/role`,
             {
@@ -80,7 +85,9 @@ const AuthProvider = ({ children }) => {
               },
             }
           );
+
           const data = await res.json();
+
           setRole(data.role || "user");
         } catch (error) {
           console.log(error);
@@ -93,6 +100,7 @@ const AuthProvider = ({ children }) => {
 
       fetchRole();
     });
+
     return () => {
       unSubscribe();
     };
