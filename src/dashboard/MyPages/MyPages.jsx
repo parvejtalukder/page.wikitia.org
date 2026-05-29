@@ -149,9 +149,18 @@ const MyPages = () => {
 
                     {/* STATUS */}
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(page.status)}`}>
-                        {page.status}
-                      </span>
+                      <div className="space-y-1">
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(page.status)}`}
+                        >
+                          {page.status}
+                        </span>
+                        {page.status === "rejected" && page.reason && (
+                          <p className="text-xs text-red-600 max-w-xs">
+                            (If you are right, mail us <span className="text-blue-500">contact@wikitia.org</span>)
+                          </p>
+                        )}
+                      </div>
                     </td>
 
                     {/* CREATED */}
@@ -183,11 +192,18 @@ const MyPages = () => {
                         </Link> 
                       )}
                       {page.paid && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-emerald-600 text-white">
+                        <span className={`${page.status === "rejected" ? "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-red-600 text-white" : "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-emerald-600 text-white"}`}>
                           <CreditCard className="w-3.5 h-3.5" />
-                          Paid (${page.charge})
+                          {
+                            page.reason ? "Failed" : "Paid"
+                          } (${page.charge})
                         </span>
                       )}
+                      {page.status === "rejected" && page.reason && (
+                          <p className="text-xs text-red-600 max-w-xs">
+                            ({page.reason})
+                          </p>
+                        )}
                     </td>
 
                     {/* ACTIONS */}
