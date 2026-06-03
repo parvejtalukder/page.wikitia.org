@@ -8,15 +8,21 @@ import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import { ImProfile } from "react-icons/im";
+import Loader from "../templates/loader/Loader";
 
 const linkClass = ({ isActive }) =>
   `flex items-center gap-2 px-3 py-2 rounded-md transition whitespace-nowrap
    ${isActive ? "bg-base-300 font-medium text-primary" : "hover:bg-base-200"}`;
 
 const Dashboard = () => {
-    const { logOut, user, role } = useAuth();
+
+    const { logOut, user, role, roleLoading } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     // const navTo = useNavigate();
+
+    if (roleLoading) {
+      return <Loader></Loader>;
+    }
 
     const logOutGo = async () => {
       try {
