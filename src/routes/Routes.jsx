@@ -25,6 +25,7 @@ import AdminRoute from "./admin/AdminRoute";
 import EditPageRequests from "../admin/EditPageRequests/EditPageRequests";
 import AllPayments from "../admin/AllPaymnets/AllPayments";
 import AllUsers from "../admin/AllUsers/AllUsers";
+import Admin from "../admin/Admin";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
     </AdminRoute>
   ),
   children: [
+    {
+      index: true, 
+      element: <Admin></Admin>
+    },
     {
       path: "create-page-requests",
       element: <PageCreationRequests />
