@@ -1,13 +1,14 @@
 // import React from "react";
 import { useState } from "react";
-import { FiPlusCircle, FiEdit2, FiBookOpen, FiLogOut, FiEdit3 } from "react-icons/fi";
+import { FiPlusCircle, FiEdit2, FiLogOut } from "react-icons/fi";
 import { FiHome } from "react-icons/fi";
-import { FiCreditCard } from "react-icons/fi";
+// import { FiCreditCard } from "react-icons/fi";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link, NavLink, Outlet } from "react-router";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import { ImProfile } from "react-icons/im";
+import { FaCreditCard, FaUserCircle } from "react-icons/fa";
 
 const linkClass = ({ isActive }) =>
   `flex items-center gap-2 px-3 py-2 rounded-md transition whitespace-nowrap
@@ -107,55 +108,55 @@ const AdminDashboard = () => {
             {!isSidebarOpen && <div className="divider my-2"></div>}
           
             <li className="w-full">
+              <NavLink to="/admin/all-payments" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
+                <FaCreditCard className="flex-shrink-0" />
+                {isSidebarOpen && <span className="ml-2">All Payments</span>}
+              </NavLink>
+            </li>
+
+            <li className="w-full">
+              <NavLink to="/admin/edit-page-requests" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
+                <FiEdit2 className="flex-shrink-0" />
+                {isSidebarOpen && <span className="ml-2">Edit Page Requests</span>}
+              </NavLink>
+            </li>
+
+            <li className="w-full">
               <NavLink to="/admin/create-page-requests" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
                 <FiPlusCircle className="flex-shrink-0" />
                 {isSidebarOpen && <span className="ml-2">Create Page Requests</span>}
               </NavLink>
             </li>
           
-            <li className="w-full">
-              <NavLink to="/dashboard/edit-page" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
-                <FiEdit2 className="flex-shrink-0" />
-                {isSidebarOpen && <span className="ml-2">Edit Page</span>}
-              </NavLink>
-            </li>
-          
-            <li className="w-full">
-              <NavLink to="/dashboard/my-edits" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
-                <FiEdit3 className="flex-shrink-0" />
-                {isSidebarOpen && <span className="ml-2">Edit Requests</span>}
-              </NavLink>
-            </li>
-          
-            <li className="w-full">
-              <NavLink to="/dashboard/my-pages" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
-                <FiBookOpen className="flex-shrink-0" />
-                {isSidebarOpen && <span className="ml-2">Pages Requests</span>}
-              </NavLink>
-            </li>
-          
             {/* ACCOUNT */}
             {isSidebarOpen && (
               <li className="menu-title mt-4">
-                <span>Account</span>
+                <span>Users Control</span>
               </li>
             )}
             
             {!isSidebarOpen && <div className="divider my-2"></div>}
           
             <li className="w-full">
-              <NavLink to="/dashboard/payments" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
-                <FiCreditCard className="flex-shrink-0" />
-                {isSidebarOpen && <span className="ml-2">Payments</span>}
+              <NavLink to="/admin/all-users" className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
+                <FaUserCircle className="flex-shrink-0" />
+                {isSidebarOpen && <span className="ml-2">All Users</span>}
               </NavLink>
             </li>
           
             <li className="w-full">
-              <NavLink to={"/dashboard/profile"} className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
+              <NavLink to={"/admin/profile"} className={`${linkClass} ${!isSidebarOpen && 'justify-center px-0'}`}>
                 <ImProfile className="flex-shrink-0" />
-                {isSidebarOpen && <span className="ml-2">Profile</span>}
+                {isSidebarOpen && <span className="ml-2">Admin Profile</span>}
               </NavLink>
             </li>
+
+            {/* ACCOUNT */}
+            {isSidebarOpen && (
+              <li className="menu-title mt-4">
+                <span>Actions</span>
+              </li>
+            )}
           
             <li className="w-full">
               <button

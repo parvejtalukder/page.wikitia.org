@@ -22,6 +22,9 @@ import MyEdits from "../dashboard/MyEdits/MyEdits";
 import MyEditDetails from "../dashboard/MyEdits/MyEditDetails";
 import PageCreationRequests from "../admin/PageCreationRequests/PageCreationRequests";
 import AdminRoute from "./admin/AdminRoute";
+import EditPageRequests from "../admin/EditPageRequests/EditPageRequests";
+import AllPayments from "../admin/AllPaymnets/AllPayments";
+import AllUsers from "../admin/AllUsers/AllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +67,22 @@ export const router = createBrowserRouter([
     {
       path: "create-page-requests",
       element: <PageCreationRequests />
+    },
+    {
+      path: "edit-page-requests",
+      element: <EditPageRequests />
+    }, {
+      path: "all-payments",
+      element: <AllPayments></AllPayments>
+    }
+    ,
+    {
+      path: "all-users",
+      element: <AllUsers></AllUsers>
+    },
+    {
+      path: "profile",
+      element: <Profile></Profile>
     }
   ],
 },

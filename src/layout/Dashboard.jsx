@@ -14,8 +14,9 @@ const linkClass = ({ isActive }) =>
    ${isActive ? "bg-base-300 font-medium text-primary" : "hover:bg-base-200"}`;
 
 const Dashboard = () => {
-    const { logOut, user } = useAuth();
+    const { logOut, user, role } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    // const navTo = useNavigate();
 
     const logOutGo = async () => {
       try {
@@ -104,6 +105,15 @@ const Dashboard = () => {
                 <span>Wiki Management</span>
               </Link>
             )}
+
+            {
+              role == "admin" && <><li className="w-full hover:text-green-500 bg-green-500 rounded-2xl text-white font-bold">
+              <NavLink to="/admin/" className={`${linkClass({ isActive: false })} ${!isSidebarOpen && 'justify-center px-0'}`}>
+                <FiPlusCircle className="flex-shrink-0" />
+                {isSidebarOpen && <span className="ml-2 hover:text-green-500">Admin</span>}
+              </NavLink>
+            </li></>
+            }
             
             {!isSidebarOpen && <div className="divider my-2"></div>}
           

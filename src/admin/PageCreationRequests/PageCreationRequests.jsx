@@ -6,7 +6,7 @@ import { useState } from "react";
 import { 
   FileText, 
   Eye, 
-  CreditCard, 
+  // CreditCard, 
   RefreshCw, 
   ChevronLeft, 
   ChevronRight, 
@@ -284,7 +284,7 @@ const PageCreationRequests = () => {
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div>
@@ -305,7 +305,7 @@ const PageCreationRequests = () => {
             <DollarSign className="w-8 h-8 text-amber-500" />
           </div>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        {/* <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Total Revenue</p>
@@ -315,7 +315,7 @@ const PageCreationRequests = () => {
             </div>
             <CreditCard className="w-8 h-8 text-green-500" />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Tabs */}
@@ -373,6 +373,7 @@ const PageCreationRequests = () => {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">User</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Payment</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Transaction Id</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Created</th>
                 <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Actions</th>
               </tr>
@@ -445,6 +446,13 @@ const PageCreationRequests = () => {
                         <p className={`text-xs ${request.paid ? 'text-green-500' : 'text-red-500'}`}>
                           {request.paid ? 'Paid' : 'Not Paid'}
                         </p>
+                      </div>
+                    </td>
+
+                    {/* TRX ID */}
+                    <td className="px-6 py-4">
+                      <div>
+                        <p>{request.tran}</p>
                       </div>
                     </td>
 
