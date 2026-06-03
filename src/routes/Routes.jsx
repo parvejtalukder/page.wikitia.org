@@ -26,6 +26,8 @@ import EditPageRequests from "../admin/EditPageRequests/EditPageRequests";
 import AllPayments from "../admin/AllPaymnets/AllPayments";
 import AllUsers from "../admin/AllUsers/AllUsers";
 import Admin from "../admin/Admin";
+import NotFound from "../templates/NotFound/NotFound";
+import RedirectToEdits from "../templates/Redirect/RedirectToEdits";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ export const router = createBrowserRouter([
         // Component: RCWP,
         element: <Private><RCWP></RCWP></Private>
       },
+      {
+        path: "choose-plan",
+        element: <Private><RedirectToEdits></RedirectToEdits></Private>
+      },
+      {
+        path: "request-for-adding-a-photo-video",
+        element: <Private><RedirectToEdits></RedirectToEdits></Private>
+      }
     ],
   },
   {
@@ -173,5 +183,10 @@ export const router = createBrowserRouter([
     //   element: <Private><DashboardHome /></Private>,
     // },
   ],
+  // errorElement: <NotFound></NotFound>
 },
+{
+  path: "*",
+  element: <NotFound></NotFound>
+}
 ]);
