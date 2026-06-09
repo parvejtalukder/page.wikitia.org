@@ -53,7 +53,7 @@ const Header = () => {
     setMobile(!mobile);
   }
 
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
     return (
       <>
@@ -69,10 +69,13 @@ const Header = () => {
                     <img onClick={toggleMobile} src={mobile ? Open : Menu} alt="Menu" className={`${mobile ? "w-6" : "w-10"} text-blue-400`} />
                 </div>
                 {
-                  !user && <a href="/login" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Login</a>
+                  !user && !loading && <a href="/login" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Login</a>
                 }
                 {
-                  user && <a href="/dashboard" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Dashboard</a>
+                  user && !loading && <a href="/dashboard" className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Dashboard</a>
+                }
+                {
+                  loading && <p className="text-[15px] lg:px-5 px-4 py-1 lg:py-2 bg-green-200 rounded-2xl text-[#136630] hover:text-[#39ab00] font-bold">Loading</p>
                 }
               </div>
         </div>
